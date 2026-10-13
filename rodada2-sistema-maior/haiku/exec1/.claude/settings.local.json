@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip3 list *)",
+      "Bash(pip3 show *)",
+      "Bash(python *)",
+      "Bash(python3 -m pip install -q -r requirements.txt)",
+      "Bash(python3 *)",
+      "Bash(PYTHONPATH=/Users/felipeserpa/Desktop/tcc-experimento/rodada2-sistema-maior/haiku/exec1 python3 -m pytest tests/unit/test_validators.py -v)",
+      "Bash(PYTHONPATH=/Users/felipeserpa/Desktop/tcc-experimento/rodada2-sistema-maior/haiku/exec1 python3 -m pytest tests/integration/test_auth_api.py -v)",
+      "Bash(git init *)"
+    ]
+  }
+}

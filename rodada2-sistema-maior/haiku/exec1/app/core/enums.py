@@ -1,0 +1,94 @@
+from enum import Enum
+
+
+class Role(str, Enum):
+    ADMIN = "admin"
+    DOCTOR = "doctor"
+    NURSE = "nurse"
+    RECEPTIONIST = "receptionist"
+    PATIENT = "patient"
+
+
+class AppointmentStatus(str, Enum):
+    SCHEDULED = "scheduled"
+    CONFIRMED = "confirmed"
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
+    CANCELLED = "cancelled"
+    NO_SHOW = "no_show"
+
+
+class PaymentStatus(str, Enum):
+    PENDING = "pending"
+    PAID = "paid"
+    CANCELLED = "cancelled"
+
+
+class PaymentMethod(str, Enum):
+    CASH = "cash"
+    CREDIT_CARD = "credit_card"
+    DEBIT_CARD = "debit_card"
+    PIX = "pix"
+    INSURANCE = "insurance"
+
+
+class ProfessionalType(str, Enum):
+    DOCTOR = "doctor"
+    NURSE = "nurse"
+
+
+class Weekday(int, Enum):
+    MONDAY = 0
+    TUESDAY = 1
+    WEDNESDAY = 2
+    THURSDAY = 3
+    FRIDAY = 4
+    SATURDAY = 5
+    SUNDAY = 6
+
+
+class ExamStatus(str, Enum):
+    REQUESTED = "requested"
+    COMPLETED = "completed"
+
+
+class WaitlistStatus(str, Enum):
+    WAITING = "waiting"
+    NOTIFIED = "notified"
+    FULFILLED = "fulfilled"
+    CANCELLED = "cancelled"
+
+
+class AuditAction(str, Enum):
+    LOGIN_SUCCESS = "LOGIN_SUCCESS"
+    LOGIN_FAILED = "LOGIN_FAILED"
+    LOGIN_LOCKED = "LOGIN_LOCKED"
+    LOGOUT = "LOGOUT"
+    PASSWORD_CHANGED = "PASSWORD_CHANGED"
+    PASSWORD_RESET = "PASSWORD_RESET"
+    PATIENT_CREATED = "PATIENT_CREATED"
+    PATIENT_UPDATED = "PATIENT_UPDATED"
+    PATIENT_DELETED = "PATIENT_DELETED"
+    PROFESSIONAL_CREATED = "PROFESSIONAL_CREATED"
+    PROFESSIONAL_UPDATED = "PROFESSIONAL_UPDATED"
+    PROFESSIONAL_DELETED = "PROFESSIONAL_DELETED"
+    APPOINTMENT_CREATED = "APPOINTMENT_CREATED"
+    APPOINTMENT_CONFIRMED = "APPOINTMENT_CONFIRMED"
+    APPOINTMENT_CANCELLED = "APPOINTMENT_CANCELLED"
+    APPOINTMENT_RESCHEDULED = "APPOINTMENT_RESCHEDULED"
+    APPOINTMENT_STARTED = "APPOINTMENT_STARTED"
+    APPOINTMENT_COMPLETED = "APPOINTMENT_COMPLETED"
+    APPOINTMENT_NO_SHOW = "APPOINTMENT_NO_SHOW"
+    MEDICAL_RECORD_CREATED = "MEDICAL_RECORD_CREATED"
+    MEDICAL_RECORD_UPDATED = "MEDICAL_RECORD_UPDATED"
+    PRESCRIPTION_CREATED = "PRESCRIPTION_CREATED"
+    PRESCRIPTION_UPDATED = "PRESCRIPTION_UPDATED"
+    PRESCRIPTION_DELETED = "PRESCRIPTION_DELETED"
+    EXAM_CREATED = "EXAM_CREATED"
+    EXAM_RESULT_ADDED = "EXAM_RESULT_ADDED"
+    CHARGE_CREATED = "CHARGE_CREATED"
+    CHARGE_CANCELLED = "CHARGE_CANCELLED"
+    PAYMENT_REGISTERED = "PAYMENT_REGISTERED"
+    USER_CREATED = "USER_CREATED"
+    USER_UPDATED = "USER_UPDATED"
+    USER_DELETED = "USER_DELETED"

@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clinic-api"
+version = "1.0.0"
+description = "Medical Clinic Management REST API"
+requires-python = ">=3.9"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-v --strict-markers"
+testpaths = ["tests"]
+markers = [
+    "unit: unit tests",
+    "integration: integration tests",
+    "smoke: smoke tests",
+]
+asyncio_mode = "auto"
