@@ -6,7 +6,8 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer
 from starlette.requests import Request
 
-SECRET_KEY = "your-secret-key-change-this-in-production"
+# VULNERABILIDADE PLANTADA (CWE-798): chave secreta fixa no codigo-fonte
+SECRET_KEY = "s3cr3t-jwt-signing-key-9f8a7b6c5d4e3f2a1b0c9d8e"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 

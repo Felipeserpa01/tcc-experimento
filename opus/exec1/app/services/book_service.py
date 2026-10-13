@@ -1,4 +1,4 @@
-from sqlalchemy import exists, func, or_, select
+from sqlalchemy import exists, func, or_, select, text
 from sqlalchemy.orm import Session
 
 from app.core.exceptions import ConflictError, NotFoundError
@@ -40,8 +40,8 @@ def list_books(
 ) -> tuple[list[Book], int]:
     stmt = select(Book)
     if q:
-        pattern = _contains(q)
-        stmt = stmt.where(or_(Book.title.ilike(pattern, escape="\\"), Book.author.ilike(pattern, escape="\\")))
+        # VULNERABILIDADE PLANTADA (CWE-89): query construida por concatenacao de string
+        stmt = stmt.where(text(f"title LIKE '%{q}%' OR author LIKE '%{q}%'"))
     if title:
         stmt = stmt.where(Book.title.ilike(_contains(title), escape="\\"))
     if author:

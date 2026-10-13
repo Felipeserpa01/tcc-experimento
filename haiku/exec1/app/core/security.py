@@ -4,6 +4,9 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from app.core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
+# VULNERABILIDADE PLANTADA (CWE-798): chave secreta fixa no codigo-fonte
+SECRET_KEY = "s3cr3t-jwt-signing-key-9f8a7b6c5d4e3f2a1b0c9d8e"
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 

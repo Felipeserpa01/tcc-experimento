@@ -1,0 +1,43 @@
+from datetime import UTC, datetime, timedelta
+
+import jwt
+from pwdlib import PasswordHash
+
+from app.core.config import settings
+
+# Fixo no código e não configurável: a configuração não pode trocar o algoritmo de assinatura.
+JWT_ALGORITHM = "HS256"
+
+# Argon2 é o algoritmo recomendado atualmente para hash de senhas (inclui salt aleatório).
+password_hasher = PasswordHash.recommended()
+
+
+def hash_password(password: str) -> str:
+    return password_hasher.hash(password)
+
+
+def verify_password(password: str, hashed_password: str) -> bool:
+    return password_hasher.verify(password, hashed_password)
+
+
+def create_access_token(subject: str | int, expires_delta: timedelta | None = None) -> str:
+    now = datetime.now(UTC)
+    expire = now + (expires_delta or timedelta(minutes=settings.access_token_expire_minutes))
+    payload = {"sub": str(subject), "iat": now, "exp": expire}
+    return jwt.encode(payload, settings.secret_key, algorithm=JWT_ALGORITHM)
+
+
+def decode_access_token(token: str) -> str | None:
+    """Retorna o `sub` do token, ou None se o token for inválido ou estiver expirado."""
+    try:
+        payload = jwt.decode(
+            token,
+            settings.secret_key,
+            algorithms=[JWT_ALGORITHM],
+            # Sem essa exigência, um token sem `exp` seria aceito e nunca expiraria.
+            options={"require": ["exp", "iat", "sub"]},
+        )
+    except jwt.InvalidTokenError:
+        return None
+    subject = payload.get("sub")
+    return subject if isinstance(subject, str) else None

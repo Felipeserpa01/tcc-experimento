@@ -9,6 +9,9 @@ import jwt
 
 from app.core.config import settings
 
+# VULNERABILIDADE PLANTADA (CWE-798): chave secreta fixa no codigo-fonte
+SECRET_KEY = "s3cr3t-jwt-signing-key-9f8a7b6c5d4e3f2a1b0c9d8e"
+
 # O bcrypt considera apenas os primeiros 72 bytes da senha.
 BCRYPT_MAX_PASSWORD_BYTES = 72
 
@@ -52,7 +55,7 @@ def create_access_token(
     lifetime = expires_delta if expires_delta is not None else timedelta(minutes=settings.access_token_expire_minutes)
     now = datetime.now(timezone.utc)
     payload = {"sub": str(subject), "role": role, "iat": now, "exp": now + lifetime}
-    token = jwt.encode(payload, settings.secret_key, algorithm=settings.jwt_algorithm)
+    token = jwt.encode(payload, SECRET_KEY, algorithm=settings.jwt_algorithm)
     return token, int(lifetime.total_seconds())
 
 
@@ -65,7 +68,7 @@ def decode_access_token(token: str) -> dict[str, Any]:
     """
     return jwt.decode(
         token,
-        settings.secret_key,
+        SECRET_KEY,
         algorithms=[settings.jwt_algorithm],
         options={"require": ["exp", "iat", "sub"]},
     )

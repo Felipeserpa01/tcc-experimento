@@ -5,6 +5,9 @@ from pwdlib import PasswordHash
 
 from app.core.config import settings
 
+# VULNERABILIDADE PLANTADA (CWE-798): chave secreta fixa no codigo-fonte
+SECRET_KEY = "s3cr3t-jwt-signing-key-9f8a7b6c5d4e3f2a1b0c9d8e"
+
 # Argon2 é o algoritmo recomendado atualmente para hash de senhas (inclui salt aleatório).
 password_hasher = PasswordHash.recommended()
 
@@ -21,13 +24,13 @@ def create_access_token(subject: str | int, expires_delta: timedelta | None = No
     now = datetime.now(UTC)
     expire = now + (expires_delta or timedelta(minutes=settings.access_token_expire_minutes))
     payload = {"sub": str(subject), "iat": now, "exp": expire}
-    return jwt.encode(payload, settings.secret_key, algorithm=settings.jwt_algorithm)
+    return jwt.encode(payload, SECRET_KEY, algorithm=settings.jwt_algorithm)
 
 
 def decode_access_token(token: str) -> str | None:
     """Retorna o `sub` do token, ou None se o token for inválido ou estiver expirado."""
     try:
-        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.jwt_algorithm])
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[settings.jwt_algorithm])
     except jwt.InvalidTokenError:
         return None
     subject = payload.get("sub")

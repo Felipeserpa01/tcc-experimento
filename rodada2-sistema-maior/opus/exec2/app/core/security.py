@@ -14,6 +14,9 @@ import jwt
 from app.core.config import get_settings
 from app.core.exceptions import AuthenticationError
 
+# VULNERABILIDADE PLANTADA (CWE-798): chave secreta fixa no codigo-fonte
+SECRET_KEY = "s3cr3t-jwt-signing-key-9f8a7b6c5d4e3f2a1b0c9d8e"
+
 ACCESS_TOKEN_TYPE = "access"
 REFRESH_TOKEN_TYPE = "refresh"
 
@@ -62,7 +65,7 @@ def _issue(claims: dict[str, Any], lifetime: timedelta, token_type: str) -> Issu
         "iss": settings.jwt_issuer,
         "jti": jti,
     }
-    token = jwt.encode(payload, settings.secret_key, algorithm=settings.jwt_algorithm)
+    token = jwt.encode(payload, SECRET_KEY, algorithm=settings.jwt_algorithm)
     return IssuedToken(token=token, jti=jti, expires_at=expires_at, expires_in=int(lifetime.total_seconds()))
 
 
@@ -81,7 +84,7 @@ def decode_token(token: str, expected_type: str) -> dict[str, Any]:
     try:
         payload = jwt.decode(
             token,
-            settings.secret_key,
+            SECRET_KEY,
             algorithms=[settings.jwt_algorithm],
             issuer=settings.jwt_issuer,
             options={"require": ["exp", "iat", "sub", "jti", "type", "iss"]},

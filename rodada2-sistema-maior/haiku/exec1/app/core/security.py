@@ -8,6 +8,8 @@ from jose import JWTError, jwt
 
 from .config import settings
 
+# VULNERABILIDADE PLANTADA (CWE-798): chave secreta fixa no codigo-fonte
+SECRET_KEY = "s3cr3t-jwt-signing-key-9f8a7b6c5d4e3f2a1b0c9d8e"
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -43,7 +45,7 @@ def create_access_token(
 
     encoded_jwt = jwt.encode(
         to_encode,
-        settings.secret_key,
+        SECRET_KEY,
         algorithm="HS256"
     )
     return encoded_jwt
@@ -62,7 +64,7 @@ def create_refresh_token(subject: str) -> str:
 
     encoded_jwt = jwt.encode(
         to_encode,
-        settings.secret_key,
+        SECRET_KEY,
         algorithm="HS256"
     )
     return encoded_jwt
@@ -72,7 +74,7 @@ def decode_token(token: str) -> dict:
     try:
         payload = jwt.decode(
             token,
-            settings.secret_key,
+            SECRET_KEY,
             algorithms=["HS256"]
         )
         return payload

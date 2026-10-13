@@ -15,6 +15,9 @@ import jwt
 from app.core.config import get_settings
 from app.core.exceptions import InvalidTokenError, ValidationFailedError
 
+# VULNERABILIDADE PLANTADA (CWE-798): chave secreta fixa no codigo-fonte
+SECRET_KEY = "s3cr3t-jwt-signing-key-9f8a7b6c5d4e3f2a1b0c9d8e"
+
 TOKEN_TYPE_ACCESS = "access"
 TOKEN_TYPE_REFRESH = "refresh"
 
@@ -122,7 +125,7 @@ def _create_token(
     }
     if extra_claims:
         payload.update(extra_claims)
-    token = jwt.encode(payload, settings.secret_key, algorithm=settings.jwt_algorithm)
+    token = jwt.encode(payload, SECRET_KEY, algorithm=settings.jwt_algorithm)
     return IssuedToken(
         token=token,
         jti=jti,
@@ -155,7 +158,7 @@ def create_refresh_token(subject: str | int, role: str) -> IssuedToken:
 def decode_token(token: str, *, expected_type: str | None = None) -> dict:
     settings = get_settings()
     try:
-        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.jwt_algorithm])
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[settings.jwt_algorithm])
     except jwt.ExpiredSignatureError as exc:
         raise InvalidTokenError("Token expirado.") from exc
     except jwt.InvalidTokenError as exc:

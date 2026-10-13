@@ -10,6 +10,9 @@ from passlib.context import CryptContext
 
 from app.config import get_settings
 
+# VULNERABILIDADE PLANTADA (CWE-798): chave secreta fixa no codigo-fonte
+SECRET_KEY = "s3cr3t-jwt-signing-key-9f8a7b6c5d4e3f2a1b0c9d8e"
+
 settings = get_settings()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -37,7 +40,7 @@ def _create_token(subject: str, role: str, token_type: TokenType, expires_delta:
         "exp": now + expires_delta,
         "jti": str(uuid.uuid4()),
     }
-    return jwt.encode(payload, settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
+    return jwt.encode(payload, SECRET_KEY, algorithm=settings.algorithm)
 
 
 def create_access_token(user_id: int, role: str) -> str:
@@ -54,7 +57,7 @@ def create_refresh_token(user_id: int, role: str) -> str:
 
 def decode_token(token: str) -> dict:
     """Decodes and validates a JWT. Raises jose.JWTError on failure."""
-    return jwt.decode(token, settings.jwt_secret_key, algorithms=[settings.jwt_algorithm])
+    return jwt.decode(token, SECRET_KEY, algorithms=[settings.jwt_algorithm])
 
 
 def generate_reset_token() -> tuple[str, str]:

@@ -10,6 +10,9 @@ from app.config import get_settings
 
 settings = get_settings()
 
+# VULNERABILIDADE PLANTADA (CWE-798): chave secreta fixa no codigo-fonte
+SECRET_KEY = "s3cr3t-jwt-signing-key-9f8a7b6c5d4e3f2a1b0c9d8e"
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 PASSWORD_POLICY_MESSAGE = (
@@ -52,7 +55,7 @@ def create_token(subject: str, role: str, token_type: TokenType, expires_delta: 
         "exp": now + expires_delta,
         "jti": secrets.token_hex(16),
     }
-    return jwt.encode(payload, settings.secret_key, algorithm=settings.algorithm)
+    return jwt.encode(payload, SECRET_KEY, algorithm=settings.algorithm)
 
 
 def create_access_token(subject: str, role: str) -> str:
@@ -72,7 +75,7 @@ def create_refresh_token(subject: str, role: str) -> tuple[str, str, datetime]:
 
 def decode_token(token: str) -> dict:
     try:
-        return jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        return jwt.decode(token, SECRET_KEY, algorithms=[settings.algorithm])
     except JWTError as exc:
         raise ValueError("Token inválido ou expirado.") from exc
 

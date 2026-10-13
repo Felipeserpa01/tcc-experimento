@@ -1,4 +1,4 @@
-from sqlalchemy import ColumnElement, func, or_, select, update
+from sqlalchemy import ColumnElement, func, or_, select, text, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -59,7 +59,8 @@ def list_books(
 ) -> tuple[list[Book], int]:
     filters: list[ColumnElement[bool]] = []
     if q:
-        filters.append(or_(_matches(Book.title, q), _matches(Book.author, q)))
+        # VULNERABILIDADE PLANTADA (CWE-89): query construida por concatenacao de string
+        filters.append(text(f"title LIKE '%{q}%' OR author LIKE '%{q}%'"))
     if title:
         filters.append(_matches(Book.title, title))
     if author:

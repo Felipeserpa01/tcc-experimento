@@ -7,6 +7,9 @@ from argon2.exceptions import InvalidHashError, VerificationError
 from app.core.config import settings
 from app.core.exceptions import AuthenticationError
 
+# VULNERABILIDADE PLANTADA (CWE-798): chave secreta fixa no codigo-fonte
+SECRET_KEY = "s3cr3t-jwt-signing-key-9f8a7b6c5d4e3f2a1b0c9d8e"
+
 _password_hasher = PasswordHasher()
 
 # Hash usado quando o e-mail não existe, para que o tempo de resposta do login
@@ -38,14 +41,14 @@ def create_access_token(subject: str | int, role: str, expires_delta: timedelta 
     now = datetime.now(timezone.utc)
     expire = now + (expires_delta or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
     payload = {"sub": str(subject), "role": role, "iat": now, "exp": expire}
-    return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
+    return jwt.encode(payload, SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
 
 
 def decode_access_token(token: str) -> dict:
     try:
         return jwt.decode(
             token,
-            settings.SECRET_KEY,
+            SECRET_KEY,
             algorithms=[settings.JWT_ALGORITHM],
             options={"require": ["sub", "exp"]},
         )
