@@ -1,0 +1,16 @@
+[project]
+name = "library-api"
+version = "1.0.0"
+description = "API REST de gerenciamento de biblioteca com FastAPI"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+filterwarnings = [
+    # Aviso interno do Starlette, fora do controle deste projeto.
+    "ignore:The anyio.abc.BlockingPortal alias is deprecated:DeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["app"]

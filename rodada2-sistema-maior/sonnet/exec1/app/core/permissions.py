@@ -1,0 +1,6 @@
+from app.models.enums import UserRole
+
+STAFF_ROLES = {UserRole.ADMIN, UserRole.DOCTOR, UserRole.NURSE, UserRole.RECEPTIONIST}
+CLINICAL_STAFF_ROLES = {UserRole.ADMIN, UserRole.DOCTOR, UserRole.NURSE}
+SCHEDULING_ROLES = {UserRole.ADMIN, UserRole.RECEPTIONIST, UserRole.NURSE}
+MANAGEMENT_ROLES = {UserRole.ADMIN, UserRole.RECEPTIONIST}

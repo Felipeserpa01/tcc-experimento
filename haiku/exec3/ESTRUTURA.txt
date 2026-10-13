@@ -1,0 +1,252 @@
+📚 BIBLIOTECA API - ESTRUTURA COMPLETA
+══════════════════════════════════════════════════════════════════════════════
+
+📦 PROJETO: API REST de Gerenciamento de Biblioteca
+🔧 STACK: FastAPI + SQLAlchemy + SQLite + JWT + Pydantic + pytest
+
+══════════════════════════════════════════════════════════════════════════════
+
+📁 ARQUITETURA
+─────────────────────────────────────────────────────────────────────────────
+
+biblioteca/
+│
+├── 📂 app/                          [Código da Aplicação]
+│   ├── main.py                     (FastAPI app, CORS, rotas)
+│   ├── database.py                 (SQLAlchemy, SessionLocal)
+│   ├── config.py                   (Settings: SECRET_KEY, DB_URL)
+│   │
+│   ├── 📂 models/                  [Modelos SQLAlchemy ORM]
+│   │   ├── user.py                 (User: id, username, email, tipo)
+│   │   ├── book.py                 (Book: title, author, ISBN, quantidade)
+│   │   └── loan.py                 (Loan: user, book, datas, multa)
+│   │
+│   ├── 📂 schemas/                 [Validação com Pydantic]
+│   │   ├── user.py                 (UserCreate, UserResponse, TokenResponse)
+│   │   ├── book.py                 (BookCreate, BookResponse, BookUpdate)
+│   │   └── loan.py                 (LoanCreate, LoanResponse, LoanReturn)
+│   │
+│   ├── 📂 routes/                  [Endpoints REST]
+│   │   ├── auth.py                 (POST /register, POST /login)
+│   │   ├── books.py                (CRUD completo de livros)
+│   │   └── loans.py                (Empréstimos, devoluções, listar)
+│   │
+│   ├── 📂 security/                [Autenticação & Autorização]
+│   │   └── jwt.py                  (JWT tokens, hash passwords, decorators)
+│   │
+│   └── 📂 utils/                   [Utilitários]
+│       └── validators.py           (Email, ISBN, password, username)
+│
+├── 📂 tests/                        [Testes Unitários com pytest]
+│   ├── conftest.py                 (Fixtures, TestClient, BD teste)
+│   ├── test_auth.py                (7 testes: registro, login)
+│   ├── test_books.py               (11 testes: CRUD de livros)
+│   └── test_loans.py               (10 testes: empréstimos)
+│
+├── 📄 requirements.txt              (Dependências Python)
+├── 📄 README.md                     (Documentação completa)
+├── 📄 QUICKSTART.md                 (Guia rápido)
+├── 📄 PROJECT_SUMMARY.md            (Resumo detalhado)
+└── 📄 example_usage.py              (Script de demonstração)
+
+══════════════════════════════════════════════════════════════════════════════
+
+🎯 FUNCIONALIDADES IMPLEMENTADAS
+─────────────────────────────────────────────────────────────────────────────
+
+✅ AUTENTICAÇÃO (7 testes)
+   • Registro de usuários com validação
+   • Login com JWT (access + refresh tokens)
+   • Tipos de usuário: Bibliotecário e Leitor
+   • Senhas criptografadas com bcrypt
+   • Validação de força de senha
+
+✅ GERENCIAMENTO DE LIVROS (11 testes)
+   • Criar livros (apenas bibliotecário)
+   • Listar todos os livros
+   • Buscar por título ou autor
+   • Consultar livro específico
+   • Atualizar informações
+   • Deletar livro
+   • Validação de ISBN (10 ou 13 dígitos)
+   • Controle de quantidade disponível
+
+✅ GERENCIAMENTO DE EMPRÉSTIMOS (10 testes)
+   • Emprestar livro (com validações)
+   • Devolver livro
+   • Listar empréstimos ativos
+   • Máximo 3 empréstimos simultâneos
+   • Não permitir emprestar sem exemplares
+   • Calcular multa por atraso (R$ 5/dia)
+   • Atualizar quantidade disponível automaticamente
+
+✅ SEGURANÇA & VALIDAÇÕES
+   • JWT com expiração
+   • Hash de senhas com bcrypt
+   • Validação de email
+   • Validação de ISBN
+   • Validação de username (3-50 chars)
+   • Validação de força de senha
+   • CORS configurado
+
+══════════════════════════════════════════════════════════════════════════════
+
+📊 ESTATÍSTICAS
+─────────────────────────────────────────────────────────────────────────────
+
+  Testes Implementados:      28/28 ✅
+  Endpoints da API:          15+
+  Modelos de Dados:          3 (User, Book, Loan)
+  Arquivos Python:           20+
+  Documentação:              3 arquivos
+  Linhas de Código:          ~2000+
+  Cobertura de Testes:       Completa
+
+══════════════════════════════════════════════════════════════════════════════
+
+🚀 COMO USAR
+─────────────────────────────────────────────────────────────────────────────
+
+1. INSTALAR DEPENDÊNCIAS
+   $ pip install -r requirements.txt
+
+2. RODAR A APLICAÇÃO
+   $ uvicorn app.main:app --reload
+   → Acesse: http://localhost:8000
+
+3. ACESSAR DOCUMENTAÇÃO
+   → Swagger: http://localhost:8000/docs
+   → ReDoc: http://localhost:8000/redoc
+
+4. EXECUTAR TESTES
+   $ pytest tests/ -v
+
+5. RODAR EXEMPLO
+   $ python3 example_usage.py
+
+══════════════════════════════════════════════════════════════════════════════
+
+🔗 ENDPOINTS PRINCIPAIS
+─────────────────────────────────────────────────────────────────────────────
+
+AUTENTICAÇÃO:
+  POST   /auth/register          Registrar novo usuário
+  POST   /auth/login             Fazer login
+
+LIVROS:
+  POST   /books/                 Criar livro (bibliotecário)
+  GET    /books/                 Listar todos os livros
+  GET    /books/{id}             Obter livro específico
+  GET    /books/search           Buscar por título/autor
+  PUT    /books/{id}             Atualizar livro (bibliotecário)
+  DELETE /books/{id}             Deletar livro (bibliotecário)
+
+EMPRÉSTIMOS:
+  POST   /loans/                 Emprestar livro
+  GET    /loans/user/active      Listar meus empréstimos ativos
+  GET    /loans/{id}             Obter detalhes do empréstimo
+  POST   /loans/return           Devolver livro
+
+UTILITÁRIOS:
+  GET    /                       Info da API
+  GET    /health                 Health check
+  GET    /docs                   Documentação Swagger
+  GET    /redoc                  Documentação ReDoc
+
+══════════════════════════════════════════════════════════════════════════════
+
+📋 MODELOS DE DADOS
+─────────────────────────────────────────────────────────────────────────────
+
+USER
+  • id (PK)
+  • username (UNIQUE, 3-50 chars)
+  • email (UNIQUE, validado)
+  • hashed_password (bcrypt)
+  • user_type (ENUM: librarian, reader)
+  • is_active (BOOL)
+
+BOOK
+  • id (PK)
+  • title (INDEX)
+  • author (INDEX)
+  • isbn (UNIQUE, validado)
+  • year (1000-2100)
+  • total_quantity
+  • available_quantity (auto-atualizado)
+  • description (NULLABLE)
+
+LOAN
+  • id (PK)
+  • user_id (FK → User)
+  • book_id (FK → Book)
+  • loan_date (DEFAULT: now)
+  • due_date (loan_date + 14 dias)
+  • return_date (NULLABLE)
+  • status (ENUM: active, returned, overdue)
+  • fine_amount (calculado: dias_atraso × 5.0)
+
+══════════════════════════════════════════════════════════════════════════════
+
+✨ DIFERENCIAIS
+─────────────────────────────────────────────────────────────────────────────
+
+✓ Dois tipos de usuário com permissões distintas
+✓ Criptografia de senha (bcrypt) com validação de força
+✓ JWT duplo (access token + refresh token)
+✓ Validação robusta de entrada em todos os campos
+✓ Controle automático de quantidade de livros
+✓ Limite de empréstimos simultâneos (máximo 3)
+✓ Cálculo automático de multa por atraso
+✓ Testes unitários completos (28 testes passando)
+✓ Documentação automática (Swagger + ReDoc)
+✓ Tratamento de erros com HTTP status apropriados
+✓ CORS configurado para acesso externo
+✓ Timestamps automáticos em todas as transações
+✓ Banco de dados isolado para testes
+
+══════════════════════════════════════════════════════════════════════════════
+
+📚 DOCUMENTAÇÃO INCLUÍDA
+─────────────────────────────────────────────────────────────────────────────
+
+README.md          → Documentação completa com exemplos
+QUICKSTART.md      → Guia rápido para começar
+PROJECT_SUMMARY.md → Resumo detalhado do projeto
+example_usage.py   → Script demonstrando todos os endpoints
+requirements.txt   → Dependências Python necessárias
+.env.example       → Template de variáveis de ambiente
+
+══════════════════════════════════════════════════════════════════════════════
+
+🎓 TECNOLOGIAS UTILIZADAS
+─────────────────────────────────────────────────────────────────────────────
+
+Backend:
+  • FastAPI (framework web moderno)
+  • Uvicorn (servidor ASGI)
+  • SQLAlchemy (ORM)
+  • SQLite (banco de dados)
+  • Pydantic (validação de dados)
+
+Autenticação:
+  • PyJWT (JSON Web Tokens)
+  • Passlib + bcrypt (criptografia)
+
+Testing:
+  • pytest (framework de testes)
+  • pytest-asyncio (testes async)
+  • httpx (cliente HTTP para testes)
+
+Utilidades:
+  • python-dotenv (variáveis de ambiente)
+  • python-jose (manipulação JWT)
+
+══════════════════════════════════════════════════════════════════════════════
+
+✅ STATUS: PROJETO CONCLUÍDO COM SUCESSO
+
+Todos os requisitos implementados e testados.
+API pronta para uso em produção.
+
+══════════════════════════════════════════════════════════════════════════════

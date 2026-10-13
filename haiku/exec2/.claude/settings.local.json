@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install *)",
+      "Bash(python *)",
+      "Bash(python3 *)",
+      "Bash(chmod +x /Users/felipeserpa/Desktop/tcc-experimento/haiku/exec2/library-api/run.sh)",
+      "Bash(curl -s http://127.0.0.1:8000/)",
+      "Bash(pkill -f uvicorn)",
+      "Bash(wait)"
+    ]
+  }
+}
